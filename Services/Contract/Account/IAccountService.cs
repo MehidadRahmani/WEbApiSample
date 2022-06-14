@@ -12,23 +12,17 @@ namespace Services.Contract.Account
     public interface IAccountService
     {
 
-        #region [-Jwt-]
-        public Task<string> GenerateTokenAsync(User user);
-       
 
-      
-     
-        #endregion
 
         #region [-Register-]
         public  Task<bool> UserNameExistAysnc(string username);
        
-        public Task<IdentityResult> Register(User user, string password, CancellationToken cancellationToken);
+        public Task<IdentityResult> Register(User user, string password);
        
         #endregion
 
         #region [-Login-]
-        public  Task<SignInResult> CheckUserAndPassword(string userName, string password, bool RememberMe);
+        public  Task<string> CheckUserAndPassword(string userName, string password, bool RememberMe);
        
         
         #endregion

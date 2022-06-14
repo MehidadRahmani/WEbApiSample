@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
+using Services.Contract.Account;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Services.Services.Account
 {
-    public class AccountService
+    public class AccountService:IAccountService
     {
 
         private readonly SiteSettings _siteSetting;
@@ -37,7 +37,7 @@ namespace Services.Services.Account
 
 
         #region [-Jwt-]
-        public async Task<string> GenerateTokenAsync(User user)
+        private async Task<string> GenerateTokenAsync(User user)
         {
             var secretKey = Encoding.UTF8.GetBytes(_siteSetting.JwtSettings.SecretKey); // longer that 16 character
             var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey), SecurityAlgorithms.HmacSha256Signature);
@@ -88,7 +88,7 @@ namespace Services.Services.Account
             var user= await userManager.FindByNameAsync(username);
             if (user != null) return true; else return false ;
         }
-        public async Task<IdentityResult> Register(User user,string password, CancellationToken cancellationToken)
+        public async Task<IdentityResult> Register(User user,string password)
         {
 
             var result = await userManager.CreateAsync(user, password);
@@ -101,11 +101,16 @@ namespace Services.Services.Account
         #endregion
 
         #region [-Login-]
-        public async Task<SignInResult> CheckUserAndPassword(string userName,string password, bool RememberMe)
+        public async Task<string> CheckUserAndPassword(string userName,string password, bool RememberMe)
         {
-            return await signInManager.PasswordSignInAsync(
+            var result= await signInManager.PasswordSignInAsync(
                  userName, password, RememberMe, true);
-
+            if (result.Succeeded == true)
+            {
+                var user = await userManager.FindByNameAsync(userName);
+                return await GenerateTokenAsync(user);
+            }
+            return null;
         }
         #endregion
 

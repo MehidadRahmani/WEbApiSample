@@ -34,8 +34,8 @@ namespace Data.DBContext
             modelBuilder.RegisterAllEntities<IEntity>(entitiesAssembly);
             modelBuilder.RegisterEntityTypeConfiguration(entitiesAssembly);
             modelBuilder.AddRestrictDeleteBehaviorConvention();
-            modelBuilder.AddSequentialGuidForIdConvention();
-            modelBuilder.AddPluralizingTableNameConvention();
+           // modelBuilder.AddSequentialGuidForIdConvention();
+        //    modelBuilder.AddPluralizingTableNameConvention();
         }
 
         public override int SaveChanges()
