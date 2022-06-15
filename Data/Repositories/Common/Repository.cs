@@ -1,5 +1,6 @@
 ﻿using Common.Utilities;
 using Data.Contract;
+using Data.Contract.Common;
 using Data.DBContext;
 using Entities.Common;
 using Microsoft.EntityFrameworkCore;
@@ -8,9 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Data.Repositories
+namespace Data.Repositories.Common
 {
     public class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
@@ -27,9 +29,11 @@ namespace Data.Repositories
         }
 
         #region Async Method
-        public virtual Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
+        public virtual async Task<TEntity> GetByIdAsync(CancellationToken cancellationToken, params object[] ids)
         {
-            return Entities.FindAsync(ids, cancellationToken);
+          return await Entities.FindAsync(ids, cancellationToken);
+            
+            
         }
 
         public virtual async Task AddAsync(TEntity entity, CancellationToken cancellationToken, bool saveNow = true)

@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Data.DBContext
@@ -33,8 +34,8 @@ namespace Data.DBContext
             modelBuilder.RegisterAllEntities<IEntity>(entitiesAssembly);
             modelBuilder.RegisterEntityTypeConfiguration(entitiesAssembly);
             modelBuilder.AddRestrictDeleteBehaviorConvention();
-            modelBuilder.AddSequentialGuidForIdConvention();
-            modelBuilder.AddPluralizingTableNameConvention();
+           // modelBuilder.AddSequentialGuidForIdConvention();
+        //    modelBuilder.AddPluralizingTableNameConvention();
         }
 
         public override int SaveChanges()
