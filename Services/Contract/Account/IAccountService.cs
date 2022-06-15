@@ -32,7 +32,9 @@ namespace Services.Contract.Account
         
 
         public Task<User> GetUser(int id, CancellationToken cancellationToken);
-    
+        public  Task UpdateUser(User user, CancellationToken cancellationToken);
+        public Task DeleteUser(User user, CancellationToken cancellationToken);
+
         #endregion
 
     }

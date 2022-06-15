@@ -7,6 +7,7 @@ using Entities.Owin;
 using Services.DTO.Account;
 using Common;
 using Common.Exceptions;
+using System.Threading;
 
 namespace IntegrationTest
 {
@@ -152,6 +153,187 @@ namespace IntegrationTest
         }
         #endregion
 
+
+        #region [-UserManager-]
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void UpdateUser_Faild_When_User_Is_Not_Exists()
+        {
+            //Arrenge
+            User user = new User()
+            {
+                Id=-1,
+                UserName = "09151191052",
+                Age = 30,
+                Email = "mehidad@gmail.com",
+                FullName = "مهرداد رحمانی",
+                Gender = GenderType.Male,
+
+            };
+            
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.UpdateUser(user,cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Update(user.Id,user,cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.NotFound, result.StatusCode);
+
+
+        }
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void UpdateUser_Succsses_When_User_Is_Exists()
+        {
+            //Arrenge
+            User user = new User()
+            {
+                Id =1,
+                UserName = "09151191052",
+                Age = 30,
+                Email = "mehidad@gmail.com",
+                FullName = "مهرداد رحمانی",
+                Gender = GenderType.Male,
+
+            };
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.UpdateUser(user, cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Update(user.Id, user, cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.Success, result.StatusCode);
+
+
+        }
+
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void DeleteUser_Faild_When_User_Is_Not_Exists()
+        {
+            //Arrenge
+            User user = new User()
+            {
+                Id = -1,
+                UserName = "09151191052",
+                Age = 30,
+                Email = "mehidad@gmail.com",
+                FullName = "مهرداد رحمانی",
+                Gender = GenderType.Male,
+
+            };
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.DeleteUser(user, cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Delete( -1, cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.NotFound, result.StatusCode);
+
+
+        }
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void DeleteUser_Succsses_When_User_Is_Exists()
+        {
+            //Arrenge
+            User user = new User()
+            {
+                Id = 1,
+                UserName = "09151191052",
+                Age = 30,
+                Email = "mehidad@gmail.com",
+                FullName = "مهرداد رحمانی",
+                Gender = GenderType.Male,
+
+            };
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.DeleteUser(user, cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Delete(user.Id, cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.Success, result.StatusCode);
+
+
+        }
+
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void GetUser_Succsses_When_User_Is_Exists()
+        {
+            //Arrenge
+          
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.GetUser(1, cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Get(1, cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.Success, result.StatusCode);
+
+
+        }
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void GetUser_Faild_When_User_Is_Not_Exists()
+        {
+            //Arrenge
+
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.GetUser(-1, cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Get(-1, cts.Token);
+
+            // Assert
+            Assert.Equal(ApiResultStatusCode.NotFound, result.StatusCode);
+
+
+        }
+        [Fact]
+        [Trait("Category", "UserManager")]
+
+        public async void GetUsers_Succsses_When_Send_Request()
+        {
+            //Arrenge
+
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+
+            mockRepo.Setup(x => x.GetUsers( cts.Token));
+            var controller = new AccountController(mockRepo.Object);
+            //Act
+            var result = await controller.Get( cts.Token);
+
+            // Assert
+            Assert.IsType<User>( result);
+
+
+        }
+        #endregion
 
     }
 }
