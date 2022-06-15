@@ -124,6 +124,23 @@ namespace Services.Services.Account
         {
             return await _userRepository.GetByIdAsync(cancellationToken,id);
         }
+        public async Task UpdateUser(User user, CancellationToken cancellationToken)
+        {
+           
+
+            await _userRepository.UpdateAsync(user, cancellationToken);
+           
+        }
+
+        public async Task DeleteUser(User user, CancellationToken cancellationToken)
+        {
+
+
+            await _userRepository.DeleteAsync(user, cancellationToken);
+
+        }
+
+
         #endregion
 
     }
