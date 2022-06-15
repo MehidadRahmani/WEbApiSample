@@ -8,11 +8,13 @@ using Services.DTO.Account;
 using System.Threading;
 using System.Threading.Tasks;
 using WebFramework.Api;
+using WebFramework.Filters;
 
 namespace Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiResultFilter]
     public class AccountController : ControllerBase
     { 
         public IAccountService _service { get; }
@@ -23,7 +25,7 @@ namespace Application.Controllers
 
         [HttpGet("[action]")]
         [AllowAnonymous]
-        public async Task<string> Login(string username, string password,bool rememberMe)
+        public async Task<ApiResult<string>> Login(string username, string password,bool rememberMe)
         {
            
             var jwt = await _service.CheckUserAndPassword(username,password,rememberMe);
@@ -31,12 +33,12 @@ namespace Application.Controllers
             {
                 return jwt;
             }
+           return BadRequest("نام کاربری یا رمز عبور اشتباه است");
+
           
-            return ("نام کاربری یا رمز عبور اشتباه است");
-        
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [AllowAnonymous]
         public async Task<ApiResult<Microsoft.AspNetCore.Identity.IdentityResult>> Create(UserDTO userDto)
         {

@@ -54,7 +54,11 @@ namespace Application
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IAccountService, AccountService>();
-           
+
+            //services.AddSwaggerGen(option => {
+            //    option.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Version = "v1", Title = "WebApiSample" });
+            
+            //});
 
         }
 
@@ -71,7 +75,11 @@ namespace Application
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options=>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Doc-V1");
+            //});
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
